@@ -360,10 +360,7 @@ public class EchoService extends BuildServiceAdapter {
     String FileNames = "";
     String downloadedFile;
     for (String file: files) {
-      downloadedFile = file;
-//      if (file.startsWith("http") || file.startsWith("HTTP")) {
       downloadedFile = downloadFile(file, directory);
-//      }
       FileNames += downloadedFile + ",";
     }
     FileNames = FileNames.substring(0, FileNames.length()-1);
