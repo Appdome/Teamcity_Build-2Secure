@@ -13,7 +13,7 @@
     <vendor>
       <name>Appdome</name>
       <url>https://www.appdome.com</url>
-      <logo>Plugin vendor logo URL</logo>
+      <logo>https://github.com/Appdome/Teamcity_Build-2Secure/blob/main/teamcity-echo-plugin-server/src/main/resources/META-INF/Appdome%20icon-40x40.svg</logo>
     </vendor>
   </info>
   <deployment use-separate-classloader="true"/>
