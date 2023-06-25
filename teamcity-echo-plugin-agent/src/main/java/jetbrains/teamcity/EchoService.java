@@ -300,6 +300,10 @@ public class EchoService extends BuildServiceAdapter {
   }
 
   public static String downloadFile(String fileUrl, String saveDirectory) throws IOException {
+    if (!fileUrl.startsWith("http") || !fileUrl.startsWith("HTTP")) {
+      // assuming the file URL is a local path
+      return fileUrl;
+    }
     URL url = new URL(fileUrl);
     String fileName = getFileNameFromUrl(fileUrl);
     String savePath = saveDirectory + File.separator + fileName;
@@ -357,9 +361,9 @@ public class EchoService extends BuildServiceAdapter {
     String downloadedFile;
     for (String file: files) {
       downloadedFile = file;
-      if (file.startsWith("http") || file.startsWith("HTTP")) {
-        downloadedFile = downloadFile(file, directory);
-      }
+//      if (file.startsWith("http") || file.startsWith("HTTP")) {
+      downloadedFile = downloadFile(file, directory);
+//      }
       FileNames += downloadedFile + ",";
     }
     FileNames = FileNames.substring(0, FileNames.length()-1);
