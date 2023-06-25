@@ -300,7 +300,7 @@ public class EchoService extends BuildServiceAdapter {
   }
 
   public static String downloadFile(String fileUrl, String saveDirectory) throws IOException {
-    if (!fileUrl.startsWith("http") || !fileUrl.startsWith("HTTP")) {
+    if (!fileUrl.startsWith("http") && !fileUrl.startsWith("HTTP")) {
       // assuming the file URL is a local path
       return fileUrl;
     }
