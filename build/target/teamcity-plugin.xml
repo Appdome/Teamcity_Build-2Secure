@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:schemas-jetbrains-com:teamcity-plugin-v1-xml">
+  <info>
+    <name>teamcity-appdome-plugin</name>
+    <display-name>teamcity-appdome-plugin</display-name>
+    <version>1.0</version>
+    <description>Build secure mobile apps using Appdome protection</description>
+    <download-url>Plugin download URL</download-url>
+    <email>eli@appdome.com</email>
+    <vendor>
+      <name>Appdome</name>
+      <url>https://www.appdome.com</url>
+      <logo>Plugin vendor logo URL</logo>
+    </vendor>
+  </info>
+  <deployment use-separate-classloader="true"/>
+</teamcity-plugin>
