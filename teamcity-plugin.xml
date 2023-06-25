@@ -6,7 +6,8 @@
     <version>1.0</version>
     <description>
       Build secure mobile apps using Appdome's protection
-      Appdome Build-2Secure is a Teamcity plugin for building secured mobile apps, using Appdome's protection.
+      See full description and tutorial at:
+      https://www.appdome.com/how-to/devsecops-automation-mobile-cicd/mobile-app-security-anti-fraud-cicd/secure-android-ios-apps-in-teamcity-ci-cd-pipelines/
     </description>
     <download-url>Plugin download URL</download-url>
     <email>eli@appdome.com</email>
