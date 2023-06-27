@@ -1,5 +1,3 @@
-# Temcity_Build2-Secure
-
 <h1>Appdome Build-2Secure TeamCity Plugin</h1>
 
 With Appdome Build-2Secure plugin, you can easily secure and customize your mobile apps on Jetbrains TeamCity as part of your build and deploy process. 
