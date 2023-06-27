@@ -136,7 +136,7 @@
 </td>
 </tr>
 <tr id="cert_pass" style="display: block">
-  <th><label for="${cert_pass}">Keystore Passwd: </label></th>
+  <th><label for="${cert_pass}">Certificate Password:</label></th>
   <td>
     <div class="pos3">
         <props:textProperty name="${cert_pass}" size="56" maxlength="100"/>
