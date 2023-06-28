@@ -39,7 +39,7 @@ public class EchoRunner extends RunType {
   @NotNull
   @Override
   public String getDisplayName() {
-    return "Appdome Build2-Secure Plugin";
+    return "Appdome Build-2Secure";
   }
 
   @NotNull
