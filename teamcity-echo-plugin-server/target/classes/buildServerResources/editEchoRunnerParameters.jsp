@@ -23,13 +23,6 @@
 <c:set var="build_to_test" value="<%=EchoRunnerConstants.BUILD_TO_TEST%>"/>
 
 <l:settingsGroup title="Appdome Build2secure Settings">
-<tr id="app_location" style="display: block">
-       <th><label for="${app_location}">App File Location: </label></th>
-       <td>
-               <props:textProperty name="${app_location}" size="56" maxlength="2000"/>
-               <span class="error" id="error_${app_location}"></span>
-       </td>
-</tr>
 <tr id="plaform" style="display: block">
 <th><label for="plaform">Platform:</label></th>
 <td>
@@ -38,6 +31,13 @@
       <props:option value="iOS" currValue="${platformSelected}">iOS</props:option>
   </props:selectProperty>
 </td>
+</tr>
+<tr id="app_location" style="display: block">
+       <th><label for="${app_location}">App File Location: </label></th>
+       <td>
+               <props:textProperty name="${app_location}" size="56" maxlength="2000"/>
+               <span class="error" id="error_${app_location}"></span>
+       </td>
 </tr>
 <tr id="fusion_set" style="display: block">
  <th><label for="${fusion_set}">Fusion Set:</label></th>
@@ -136,7 +136,7 @@
 </td>
 </tr>
 <tr id="cert_pass" style="display: block">
-  <th><label for="${cert_pass}">Keystore Passwd: </label></th>
+  <th><label for="${cert_pass}">Certificate Password:</label></th>
   <td>
     <div class="pos3">
         <props:textProperty name="${cert_pass}" size="56" maxlength="100"/>
@@ -164,6 +164,14 @@
     <option value="Lambdatest" currValue="${build_to_testSelected}">Lambdatest</option>
   </props:selectProperty>
 </td>
+</tr>
+<tr id="build_logs" style="display: block">
+  <th><label for="build_logs">Build with Logs:</label></th>
+  <td>
+      <div class="pos4">
+          <props:checkboxProperty name="${build_logs}"/>
+      </div>
+  </td>
 </tr>
 
 </l:settingsGroup>
