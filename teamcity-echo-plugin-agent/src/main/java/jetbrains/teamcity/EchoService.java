@@ -210,6 +210,7 @@ public class EchoService extends BuildServiceAdapter {
 
     String VanillaFileName = new File(AppFileLocal).getName();
     String FusedAppFile = localDir + "/Appdome_" + VanillaFileName;
+    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.0.0");
     setOutputEnv("APPDOME_BUILD", FusedAppFile);
     String CertSecureFile = localDir + "/certificate.pdf";
     String App = "--app " + AppFileLocal;
