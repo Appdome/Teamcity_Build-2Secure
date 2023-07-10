@@ -1,19 +1,12 @@
 package jetbrains.teamcity;
 
-import jetbrains.buildServer.artifacts.ArtifactData;
 import jetbrains.buildServer.serverSide.InvalidProperty;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
-import jetbrains.buildServer.serverSide.artifacts.ArtifactsGuard;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
-import jetbrains.buildServer.web.openapi.artifacts.ArtifactDownloadProcessor;
-import jetbrains.buildServer.web.util.ArtifactsWebUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import jetbrains.buildServer.serverSide.*;
-import jetbrains.buildServer.util.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
