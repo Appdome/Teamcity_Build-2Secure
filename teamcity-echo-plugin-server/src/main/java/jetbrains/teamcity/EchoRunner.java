@@ -132,7 +132,8 @@ public class EchoRunner extends RunType {
     ENT = (ENT == null) ? "Not provided": "Provided";
     String SignType = parameters.get(SIGN_TYPE);
     String Build2Test = parameters.get(BUILD_TO_TEST);
-
+    String SO = parameters.get(SECONDARY_OUTPUT);
+    SO = (SO == null) ? "false":"Appdome_Universal.apk";
 
     String description = "App Location: " + AppLocation
               + "\nPlatform: " + Platform
@@ -142,6 +143,7 @@ public class EchoRunner extends RunType {
     if (Platform.equals("Android")) {
       description += "\nGoogle Sign: " + GoogleSign
               + "\nFingerprint: " + FP
+              + "\nSecondary Output: " + SO
               + "\nKeystore File: " + KSF
               + "\nKey Store Password: " + KSP
               + "\nKey Store Alias: " + KSA

@@ -17,6 +17,7 @@ import jetbrains.buildServer.vcs.VcsChangeInfo;
 import jetbrains.buildServer.vcs.VcsRoot;
 import jetbrains.buildServer.vcs.VcsRootEntry;
 import jetbrains.buildServer.xmlrpc.NodeIdHolder;
+import org.apache.xpath.operations.Bool;
 import org.jetbrains.annotations.NotNull;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.Nullable;
@@ -29,26 +30,128 @@ import java.io.IOException;
 import java.util.*;
 import java.net.URL;
 
+
 public class EchoService extends BuildServiceAdapter {
+
   private final Set<File> myFilesToDelete = new HashSet<File>();
+
+  private String CollectSigningDetailsAndroid(String localDir, Boolean isAAB) {
+    String Fingerprint = getRunnerParameters().get(EchoRunnerConstants.FINGERPRINT);
+    String SigningFingerprint = (Fingerprint == null) ? "": " --signing_fingerprint " + Fingerprint;
+    String GoogleSign = getRunnerParameters().get(EchoRunnerConstants.GOOGLE_SIGN);
+    if (GoogleSign == null) {
+      GoogleSign = "";
+    } else {
+      GoogleSign = " --google_play_signing ";
+      String GooglePlayFingerprint = getRunnerParameters().get(EchoRunnerConstants.GOOGLE_PLAY_FINGERPRINT);
+      GoogleSign = " --signing_fingerprint " + GooglePlayFingerprint;
+    }
+
+    String SignType = getRunnerParameters().get(EchoRunnerConstants.SIGN_TYPE);
+    String Sign_Type;
+    String SingDetails;
+    switch (SignType) {
+      case "Private-Sign":
+        Sign_Type = " --private_signing";
+        SingDetails = Sign_Type
+                + GoogleSign
+                + SigningFingerprint;
+        break;
+      case "Auto-Dev-Sign":
+        Sign_Type = " --auto_dev_private_signing";
+        SingDetails = Sign_Type
+                + GoogleSign
+                + SigningFingerprint;
+        break;
+      default:
+        Sign_Type = " --sign_on_appdome";
+        String KeystoreLocation = getRunnerParameters().get(EchoRunnerConstants.KEYSTORE_FILE_LOCATION);
+        String Keystore;
+        try {
+          Keystore = VarsToFiles(KeystoreLocation, "--keystore", localDir);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+        String KeystorePass = " --keystore_pass " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.KEYSTORE_PASS));
+        String KeystoreAlias = " --keystore_alias " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.KEYSTORE_ALIAS));
+        String KeyPass = " --key_pass " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.KEY_PASS));
+        SingDetails = Sign_Type
+                + Keystore
+                + KeystorePass
+                + KeystoreAlias
+                + KeyPass
+                + GoogleSign
+                + SigningFingerprint;
+        break;
+    }
+
+    String SecondaryOutput = getRunnerParameters().get(EchoRunnerConstants.SECONDARY_OUTPUT);
+    if ((SecondaryOutput != null) && isAAB) {
+      String BuildSO = localDir + "/Appdome_Universal.apk";
+      SecondaryOutput = " --second_output " + BuildSO;
+      setOutputEnv("APPDOME_BUILD_SO", BuildSO);
+    } else {
+      SecondaryOutput = "";
+    }
+
+    SingDetails += SecondaryOutput;
+    return SingDetails;
+  }
+
+  private String CollectSigningDetailsIOS(String localDir) {
+    String ProvisioningFilesLocation = getRunnerParameters().get(EchoRunnerConstants.PROVISIONING_FILE_LOCATION);
+    String EntFileLocation;
+    String ProvisioningProfile;
+    String Entitelements;
+    String SingDetails;
+    try {
+      ProvisioningProfile = VarsToFiles(ProvisioningFilesLocation, "--provisioning_profiles", localDir);
+      EntFileLocation = getRunnerParameters().get(EchoRunnerConstants.ENT_FILE_LOCATION);
+      Entitelements =  VarsToFiles(EntFileLocation, "--entitlements", localDir);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    String SignType = getRunnerParameters().get(EchoRunnerConstants.SIGN_TYPE);
+    String Sign_Type = "";
+    switch (SignType) {
+      case "Private-Sign":
+        Sign_Type = " --private_signing";
+        SingDetails = Sign_Type
+                + ProvisioningProfile
+                + Entitelements;
+        break;
+      case "Auto-Dev-Sign":
+        Sign_Type = " --auto_dev_private_signing";
+        SingDetails = Sign_Type
+                + ProvisioningProfile
+                + Entitelements;
+        break;
+      default:
+        Sign_Type = " --sign_on_appdome";
+        String Keystore;
+        String KeystoreLocation = getRunnerParameters().get(EchoRunnerConstants.CERT_FILE_LOCATION);
+        try {
+          Keystore = VarsToFiles(KeystoreLocation, "--keystore", localDir);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+        String KeystorePass = " --keystore_pass " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.CERT_PASS));
+        SingDetails = Sign_Type
+                + Keystore
+                + KeystorePass
+                + ProvisioningProfile
+                + Entitelements;
+
+        break;
+    }
+    return SingDetails;
+  }
 
   @NotNull
   @Override
-//  public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-//
-//    final String message = getRunnerParameters().get(EchoRunnerConstants.MESSAGE_KEY);
-//
-//    final String scriptContent = "/bin/echo " + message + " | tee echo.txt";
-//
-//    final String script = getCustomScript(scriptContent);
-//
-//    setExecutableAttribute(script);
-//
-//    return new SimpleProgramCommandLine(getRunnerContext(), script, Collections.<String>emptyList());
-//  }
-
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-
+    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.0.0");
     String localDir = getWorkingDirectory().getAbsolutePath() + "/appdome-api-bash";
     try {
       FileUtils.deleteDirectory(new File(localDir));
@@ -72,130 +175,9 @@ public class EchoService extends BuildServiceAdapter {
 
     String Build2Test = getRunnerParameters().get(EchoRunnerConstants.BUILD_TO_TEST);
     if (Build2Test == null) {
-      Build2Test = "None";
-    }
-    if (Build2Test.equals("None")) {
       Build2Test = "";
     } else {
-      Build2Test = " --build_to_test " + Build2Test.toLowerCase();
-    }
-
-    final String Platform = getRunnerParameters().get(EchoRunnerConstants.PLATFORM);
-
-    // android related params
-
-    final String Fingerprint = getRunnerParameters().get(EchoRunnerConstants.FINGERPRINT);
-    String SigningFingerprint = (Fingerprint == null) ? "": " --signing_fingerprint " + Fingerprint;
-
-    String GoogleSign = getRunnerParameters().get(EchoRunnerConstants.GOOGLE_SIGN);
-    if (GoogleSign == null) {
-      GoogleSign = "";
-    } else {
-      GoogleSign = " --google_play_signing ";
-      String GooglePlayFingerprint = getRunnerParameters().get(EchoRunnerConstants.GOOGLE_PLAY_FINGERPRINT);
-      SigningFingerprint = " --signing_fingerprint " + GooglePlayFingerprint;
-    }
-
-    String KeystoreLocation;
-    String Keystore = "";
-    String KeystorePass = "";
-    String KeystoreAlias = "";
-    String KeyPass = "";
-
-    // ios related params
-
-    String ProvisioningProfile;
-    String Entitelements;
-
-    // signing type
-    String SingDetails;
-    String SignType = getRunnerParameters().get(EchoRunnerConstants.SIGN_TYPE);
-    switch (SignType) {
-      case "Private-Sign":
-        SignType = " --private_signing";
-        if (Platform.equals("Android")) {
-          SingDetails = SignType
-                      + GoogleSign
-                      + SigningFingerprint;
-        } else {
-          try {
-            String ProvisioningFilesLocation = getRunnerParameters().get(EchoRunnerConstants.PROVISIONING_FILE_LOCATION);
-            ProvisioningProfile = VarsToFiles(ProvisioningFilesLocation, "--provisioning_profiles", localDir);
-            String EntFileLocation = getRunnerParameters().get(EchoRunnerConstants.ENT_FILE_LOCATION);
-            Entitelements =  VarsToFiles(EntFileLocation, "--entitlements", localDir);
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-          SingDetails = SignType
-                      + ProvisioningProfile
-                      + Entitelements;
-        }
-        break;
-      case "Auto-Dev-Sign":
-        SignType = " --auto_dev_private_signing";
-        if (Platform.equals("Android")) {
-          SingDetails = SignType
-                      + GoogleSign
-                      + SigningFingerprint;
-        } else {
-          try {
-            String ProvisioningFilesLocation = getRunnerParameters().get(EchoRunnerConstants.PROVISIONING_FILE_LOCATION);
-            ProvisioningProfile = VarsToFiles(ProvisioningFilesLocation, "--provisioning_profiles", localDir);
-            String EntFileLocation = getRunnerParameters().get(EchoRunnerConstants.ENT_FILE_LOCATION);
-            Entitelements =  VarsToFiles(EntFileLocation, "--entitlements", localDir);
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-          SingDetails = SignType
-                      + ProvisioningProfile
-                      + Entitelements;
-        }
-        break;
-      default:
-        SignType = " --sign_on_appdome";
-        if (Platform.equals("Android")) {
-          KeystoreLocation = getRunnerParameters().get(EchoRunnerConstants.KEYSTORE_FILE_LOCATION);
-          try {
-            Keystore = VarsToFiles(KeystoreLocation, "--keystore", localDir);
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-
-          KeystorePass = " --keystore_pass " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.KEYSTORE_PASS));
-
-
-          KeystoreAlias = " --keystore_alias " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.KEYSTORE_ALIAS));
-          KeyPass = " --key_pass " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.KEY_PASS));
-          SingDetails = SignType
-                      + Keystore
-                      + KeystorePass
-                      + KeystoreAlias
-                      + KeyPass
-                      + GoogleSign
-                      + SigningFingerprint;
-        } else {
-          KeystoreLocation = getRunnerParameters().get(EchoRunnerConstants.CERT_FILE_LOCATION);
-          try {
-            Keystore = VarsToFiles(KeystoreLocation, "--keystore", localDir);
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-          KeystorePass = " --keystore_pass " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.CERT_PASS));
-          try {
-            String ProvisioningFilesLocation = getRunnerParameters().get(EchoRunnerConstants.PROVISIONING_FILE_LOCATION);
-            ProvisioningProfile = VarsToFiles(ProvisioningFilesLocation, "--provisioning_profiles", localDir);
-            String EntFileLocation = getRunnerParameters().get(EchoRunnerConstants.ENT_FILE_LOCATION);
-            Entitelements =  VarsToFiles(EntFileLocation, "--entitlements", localDir);
-          } catch (IOException e) {
-          throw new RuntimeException(e);
-          }
-          SingDetails = SignType
-                      + Keystore
-                      + KeystorePass
-                      + ProvisioningProfile
-                      + Entitelements;
-        }
-        break;
+      Build2Test = " -btv " + Build2Test.toLowerCase();
     }
 
     // download app file
@@ -209,8 +191,18 @@ public class EchoService extends BuildServiceAdapter {
     }
 
     String VanillaFileName = new File(AppFileLocal).getName();
+    String AppType = VanillaFileName.substring(VanillaFileName.lastIndexOf(".")+1);
+    Boolean isAAB = (AppType.equals("aab")) ? true:false;
+
+    final String Platform = getRunnerParameters().get(EchoRunnerConstants.PLATFORM);
+    String SignDetails;
+    if (Platform.equals("Android")) {
+      SignDetails = CollectSigningDetailsAndroid(localDir, isAAB);
+    } else {
+      SignDetails = CollectSigningDetailsIOS(localDir);
+    }
+
     String FusedAppFile = localDir + "/Appdome_" + VanillaFileName;
-    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.0.0");
     setOutputEnv("APPDOME_BUILD", FusedAppFile);
     String CertSecureFile = localDir + "/certificate.pdf";
     String App = "--app " + AppFileLocal;
@@ -223,16 +215,14 @@ public class EchoService extends BuildServiceAdapter {
                   + FusionSetId
                   + TeamId
                   + BuildLogs
-                  + SingDetails;
+                  + SignDetails;
 
     scriptContent += OutputFile + CertOutput + " | tee appdome.log";
 
     String script = getCustomScript(scriptContent);
     setExecutableAttribute(script);
-
     return new SimpleProgramCommandLine(getRunnerContext(), script, Collections.<String>emptyList());
   }
-
 
   String getCustomScript(String scriptContent) throws RunBuildException {
     try {
@@ -338,7 +328,7 @@ public class EchoService extends BuildServiceAdapter {
     return param;
   }
 
-  private String VarsToFiles(String EnvVars, String param, String directory) throws IOException {
+  public String VarsToFiles(String EnvVars, String param, String directory) throws IOException {
     String file;
     String[] Evars = EnvVars.split(",");
     ArrayList<String> files = new ArrayList<String>();
