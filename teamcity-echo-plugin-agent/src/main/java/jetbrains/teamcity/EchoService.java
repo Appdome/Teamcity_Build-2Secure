@@ -42,29 +42,21 @@ public class EchoService extends BuildServiceAdapter {
     if (GoogleSign == null) {
       GoogleSign = "";
     } else {
-      GoogleSign = " --google_play_signing ";
       String GooglePlayFingerprint = getRunnerParameters().get(EchoRunnerConstants.GOOGLE_PLAY_FINGERPRINT);
-      GoogleSign = " --signing_fingerprint " + GooglePlayFingerprint;
+      GoogleSign = " --google_play_signing --signing_fingerprint " + GooglePlayFingerprint;
+      SigningFingerprint = "";
     }
 
     String SignType = getRunnerParameters().get(EchoRunnerConstants.SIGN_TYPE);
-    String Sign_Type;
     String SingDetails;
     switch (SignType) {
       case "Private-Sign":
-        Sign_Type = " --private_signing";
-        SingDetails = Sign_Type
-                + GoogleSign
-                + SigningFingerprint;
+        SingDetails = " --private_signing";
         break;
       case "Auto-Dev-Sign":
-        Sign_Type = " --auto_dev_private_signing";
-        SingDetails = Sign_Type
-                + GoogleSign
-                + SigningFingerprint;
+        SingDetails = " --auto_dev_private_signing";
         break;
       default:
-        Sign_Type = " --sign_on_appdome";
         String KeystoreLocation = getRunnerParameters().get(EchoRunnerConstants.KEYSTORE_FILE_LOCATION);
         String Keystore;
         try {
@@ -75,13 +67,11 @@ public class EchoService extends BuildServiceAdapter {
         String KeystorePass = " --keystore_pass " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.KEYSTORE_PASS));
         String KeystoreAlias = " --keystore_alias " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.KEYSTORE_ALIAS));
         String KeyPass = " --key_pass " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.KEY_PASS));
-        SingDetails = Sign_Type
+        SingDetails = " --sign_on_appdome"
                 + Keystore
                 + KeystorePass
                 + KeystoreAlias
-                + KeyPass
-                + GoogleSign
-                + SigningFingerprint;
+                + KeyPass;
         break;
     }
 
@@ -94,7 +84,9 @@ public class EchoService extends BuildServiceAdapter {
       SecondaryOutput = "";
     }
 
-    SingDetails += SecondaryOutput;
+    SingDetails += GoogleSign
+                + SigningFingerprint
+                + SecondaryOutput;
     return SingDetails;
   }
 
@@ -113,22 +105,14 @@ public class EchoService extends BuildServiceAdapter {
     }
 
     String SignType = getRunnerParameters().get(EchoRunnerConstants.SIGN_TYPE);
-    String Sign_Type = "";
     switch (SignType) {
       case "Private-Sign":
-        Sign_Type = " --private_signing";
-        SingDetails = Sign_Type
-                + ProvisioningProfile
-                + Entitelements;
+        SingDetails = " --private_signing";
         break;
       case "Auto-Dev-Sign":
-        Sign_Type = " --auto_dev_private_signing";
-        SingDetails = Sign_Type
-                + ProvisioningProfile
-                + Entitelements;
+        SingDetails = " --auto_dev_private_signing";
         break;
       default:
-        Sign_Type = " --sign_on_appdome";
         String Keystore;
         String KeystoreLocation = getRunnerParameters().get(EchoRunnerConstants.CERT_FILE_LOCATION);
         try {
@@ -137,14 +121,13 @@ public class EchoService extends BuildServiceAdapter {
           throw new RuntimeException(e);
         }
         String KeystorePass = " --keystore_pass " + EnvVarToParam(getRunnerParameters().get(EchoRunnerConstants.CERT_PASS));
-        SingDetails = Sign_Type
+        SingDetails = " --sign_on_appdome"
                 + Keystore
-                + KeystorePass
-                + ProvisioningProfile
-                + Entitelements;
-
+                + KeystorePass;
         break;
     }
+    SingDetails += ProvisioningProfile
+                + Entitelements;
     return SingDetails;
   }
 
@@ -162,6 +145,14 @@ public class EchoService extends BuildServiceAdapter {
       GitCloneAppdomeAPI(localDir);
     } catch (Exception e) {
       throw new RuntimeException(e);
+    }
+    Boolean debug = false;
+    try {
+      String debugOnly = getEnvironmentVariables().get("APPDOME_DEBUG");
+      if (debugOnly.equals("1")) {
+        debug = true;
+      }
+    } catch (Exception e) {
     }
 
     String ApiKey = " --api_key " + getEnvironmentVariables().get("api_key");
@@ -209,6 +200,9 @@ public class EchoService extends BuildServiceAdapter {
     String OutputFile = " --output " + FusedAppFile;
     String CertOutput = " --certificate_output " + CertSecureFile;
     String scriptContent = "cd " + localDir + "; ./appdome_api.sh ";
+    if (debug) {
+      scriptContent = "echo ";
+    }
 
     scriptContent += App
                   + ApiKey

@@ -88,13 +88,12 @@ public class EchoRunner extends RunType {
   @Override
 
   public String describeParameters(@NotNull Map<String, String> parameters) {
-
-
-
     String Platform = parameters.get(PLATFORM);
     String AppLocation = parameters.get(APP_LOCATION);
     AppLocation = (AppLocation == null) ? "Not provided": "Provided";
     String FP;
+    String TeamId = parameters.get(TEAM_ID);
+    TeamId = (TeamId == null) ? "Not provided": TeamId;
     String GoogleSign = parameters.get(GOOGLE_SIGN);
     if (GoogleSign == null) {
       GoogleSign = "false";
@@ -131,6 +130,7 @@ public class EchoRunner extends RunType {
     String description = "App Location: " + AppLocation
               + "\nPlatform: " + Platform
               + "\nFusion Set: " + FS
+              + "\nTeam ID: " + TeamId
               + "\nSign Type: " + SignType;
 
     if (Platform.equals("Android")) {

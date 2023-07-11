@@ -14,6 +14,7 @@
 <c:set var="keystore_file_location" value="<%=EchoRunnerConstants.KEYSTORE_FILE_LOCATION%>"/>
 <c:set var="platform" value="<%=EchoRunnerConstants.PLATFORM%>"/>
 <c:set var="build_logs" value="<%=EchoRunnerConstants.BUILD_LOGS%>"/>
+<c:set var="team_id" value="<%=EchoRunnerConstants.TEAM_ID%>"/>
 <c:set var="app_location" value="<%=EchoRunnerConstants.APP_LOCATION%>"/>
 <c:set var="fusion_set" value="<%=EchoRunnerConstants.FUSION_SET%>"/>
 <c:set var="provisioning_profile_file_location" value="<%=EchoRunnerConstants.PROVISIONING_FILE_LOCATION%>"/>
@@ -45,6 +46,13 @@
  <td>
     <props:textProperty name="${fusion_set}" size="56" maxlength="100"/>
     <span class="error" id="error_${fusion_set}"></span>
+ </td>
+</tr>
+<tr id="team_id" style="display: block">
+ <th><label for="${team_id}">Team ID:</label></th>
+ <td>
+    <props:textProperty name="${team_id}" size="56" maxlength="100"/>
+    <span class="error" id="error_${team_id}"></span>
  </td>
 </tr>
 <tr id="sign_typexx" style="display: block">
