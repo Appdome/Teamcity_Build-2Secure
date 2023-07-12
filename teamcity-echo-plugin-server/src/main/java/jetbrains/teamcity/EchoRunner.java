@@ -126,6 +126,9 @@ public class EchoRunner extends RunType {
     String Build2Test = parameters.get(BUILD_TO_TEST);
     String SO = parameters.get(SECONDARY_OUTPUT);
     SO = (SO == null) ? "false":"Appdome_Universal.apk";
+    if (SignType.equals("Auto-Dev-Sign")) {
+      SO = "false";
+    }
 
     String description = "App Location: " + AppLocation
               + "\nPlatform: " + Platform

@@ -204,23 +204,31 @@
          BS.Util.show('fingerprint');
          BS.Util.show('google_play_fp');
          BS.Util.show('google_sign');
-         BS.Util.show('secondary_output');
+         BS.Util.hide('secondary_output');
          BS.Util.hide('provisioning_profile_file_location');
          BS.Util.hide('ent_file_location');
          BS.Util.hide('cert_file_location');
          BS.Util.hide('cert_pass');
+
          if ('On-Appdome-Sign' == selectedValue) {
              BS.Util.show('keystore_file_location');
              BS.Util.show('keystore_pass');
              BS.Util.show('keystore_alias');
              BS.Util.show('key_pass');
+             BS.Util.show('secondary_output');
              BS.Util.hide('fingerprint');
          } else {
+             if ('Auto-Dev-Sign' == selectedValue) {
+                BS.Util.hide('secondary_output');
+             } else {
+                BS.Util.show('secondary_output');
+             }
              BS.Util.hide('key_pass');
              BS.Util.hide('keystore_pass');
              BS.Util.hide('keystore_alias');
              BS.Util.hide('keystore_file_location');
          }
+
      } else {
         BS.Util.hide('fingerprint');
         BS.Util.hide('google_play_fp');
