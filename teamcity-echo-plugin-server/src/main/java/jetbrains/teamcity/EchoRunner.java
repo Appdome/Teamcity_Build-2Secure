@@ -1,19 +1,12 @@
 package jetbrains.teamcity;
 
-import jetbrains.buildServer.artifacts.ArtifactData;
 import jetbrains.buildServer.serverSide.InvalidProperty;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
-import jetbrains.buildServer.serverSide.artifacts.ArtifactsGuard;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
-import jetbrains.buildServer.web.openapi.artifacts.ArtifactDownloadProcessor;
-import jetbrains.buildServer.web.util.ArtifactsWebUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import jetbrains.buildServer.serverSide.*;
-import jetbrains.buildServer.util.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -95,13 +88,12 @@ public class EchoRunner extends RunType {
   @Override
 
   public String describeParameters(@NotNull Map<String, String> parameters) {
-
-
-
     String Platform = parameters.get(PLATFORM);
     String AppLocation = parameters.get(APP_LOCATION);
     AppLocation = (AppLocation == null) ? "Not provided": "Provided";
     String FP;
+    String TeamId = parameters.get(TEAM_ID);
+    TeamId = (TeamId == null) ? "Not provided": TeamId;
     String GoogleSign = parameters.get(GOOGLE_SIGN);
     if (GoogleSign == null) {
       GoogleSign = "false";
@@ -132,16 +124,19 @@ public class EchoRunner extends RunType {
     ENT = (ENT == null) ? "Not provided": "Provided";
     String SignType = parameters.get(SIGN_TYPE);
     String Build2Test = parameters.get(BUILD_TO_TEST);
-
+    String SO = parameters.get(SECONDARY_OUTPUT);
+    SO = (SO == null) ? "false":"Appdome_Universal.apk";
 
     String description = "App Location: " + AppLocation
               + "\nPlatform: " + Platform
               + "\nFusion Set: " + FS
+              + "\nTeam ID: " + TeamId
               + "\nSign Type: " + SignType;
 
     if (Platform.equals("Android")) {
       description += "\nGoogle Sign: " + GoogleSign
               + "\nFingerprint: " + FP
+              + "\nSecondary Output: " + SO
               + "\nKeystore File: " + KSF
               + "\nKey Store Password: " + KSP
               + "\nKey Store Alias: " + KSA

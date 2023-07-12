@@ -14,6 +14,7 @@
 <c:set var="keystore_file_location" value="<%=EchoRunnerConstants.KEYSTORE_FILE_LOCATION%>"/>
 <c:set var="platform" value="<%=EchoRunnerConstants.PLATFORM%>"/>
 <c:set var="build_logs" value="<%=EchoRunnerConstants.BUILD_LOGS%>"/>
+<c:set var="team_id" value="<%=EchoRunnerConstants.TEAM_ID%>"/>
 <c:set var="app_location" value="<%=EchoRunnerConstants.APP_LOCATION%>"/>
 <c:set var="fusion_set" value="<%=EchoRunnerConstants.FUSION_SET%>"/>
 <c:set var="provisioning_profile_file_location" value="<%=EchoRunnerConstants.PROVISIONING_FILE_LOCATION%>"/>
@@ -21,6 +22,7 @@
 <c:set var="cert_pass" value="<%=EchoRunnerConstants.CERT_PASS%>"/>
 <c:set var="ent_file_location" value="<%=EchoRunnerConstants.ENT_FILE_LOCATION%>"/>
 <c:set var="build_to_test" value="<%=EchoRunnerConstants.BUILD_TO_TEST%>"/>
+<c:set var="secondary_output" value="<%=EchoRunnerConstants.SECONDARY_OUTPUT%>"/>
 
 <l:settingsGroup title="Appdome Build2secure Settings">
 <tr id="plaform" style="display: block">
@@ -44,6 +46,13 @@
  <td>
     <props:textProperty name="${fusion_set}" size="56" maxlength="100"/>
     <span class="error" id="error_${fusion_set}"></span>
+ </td>
+</tr>
+<tr id="team_id" style="display: block">
+ <th><label for="${team_id}">Team ID:</label></th>
+ <td>
+    <props:textProperty name="${team_id}" size="56" maxlength="100"/>
+    <span class="error" id="error_${team_id}"></span>
  </td>
 </tr>
 <tr id="sign_typexx" style="display: block">
@@ -109,13 +118,20 @@
       </div>
   </td>
 </tr>
-
 <tr id="fingerprint" style="display: block">
 <th><label for="${fingerprint}">Fingerprint:</label></th>
 <td>
     <props:textProperty name="${fingerprint}" size="56" maxlength="100"/>
     <span class="error" id="error_${fingerprint}"></span>
 </td>
+</tr>
+<tr id="secondary_output" style="display: block">
+  <th><label for="secondary_output">Secondary Output:</label></th>
+  <td>
+      <div class="pos4">
+          <props:checkboxProperty name="${secondary_output}"/>
+      </div>
+  </td>
 </tr>
 <tr id="provisioning_profile_file_location" style="display: block">
 <th><label for="${provisioning_profile_file_location}">Provisioning Profile Files:</label></th>
@@ -188,6 +204,7 @@
          BS.Util.show('fingerprint');
          BS.Util.show('google_play_fp');
          BS.Util.show('google_sign');
+         BS.Util.show('secondary_output');
          BS.Util.hide('provisioning_profile_file_location');
          BS.Util.hide('ent_file_location');
          BS.Util.hide('cert_file_location');
@@ -208,6 +225,7 @@
         BS.Util.hide('fingerprint');
         BS.Util.hide('google_play_fp');
         BS.Util.hide('google_sign');
+        BS.Util.hide('secondary_output');
         BS.Util.hide('key_pass');
         BS.Util.hide('keystore_pass');
         BS.Util.hide('keystore_alias');

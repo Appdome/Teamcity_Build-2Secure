@@ -17,6 +17,7 @@ public interface EchoRunnerConstants {
   String KEY_PASS = "key_pass";
   String API_KEY = System.getenv("api_key");
   String FUSION_SET = "fusion_set";
+  String SECONDARY_OUTPUT = "secondary_output";
   String TEAM_ID = "team_id";
   String PROVISIONING_FILE_LOCATION = "provisioning_file_location";
   String CERT_FILE_LOCATION = "cert_file_location";
@@ -24,5 +25,6 @@ public interface EchoRunnerConstants {
   String ENT_FILE_LOCATION = "ent_file_location";
   String BUILD_TO_TEST = "build2test";
   String APPDOME_BUILD = System.getenv("APPDOME_BUILD");
+  String APPDOME_BUILD_SO = System.getenv("APPDOME_BUILD_SO");
   String AppdomeRepoURL = "https://github.com/Appdome/appdome-api-bash.git";
 }
