@@ -76,7 +76,7 @@ public class EchoService extends BuildServiceAdapter {
     }
 
     String SecondaryOutput = getRunnerParameters().get(EchoRunnerConstants.SECONDARY_OUTPUT);
-    if ((SecondaryOutput != null) && isAAB) {
+    if ((SecondaryOutput != null) && isAAB && !SignType.equals("Auto-Dev-Sign")) {
       String BuildSO = localDir + "/Appdome_Universal.apk";
       SecondaryOutput = " --second_output " + BuildSO;
       setOutputEnv("APPDOME_BUILD_SO", BuildSO);
