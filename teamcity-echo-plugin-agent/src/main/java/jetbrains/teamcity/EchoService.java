@@ -165,7 +165,7 @@ public class EchoService extends BuildServiceAdapter {
     BuildLogs = (BuildLogs == null) ? "": " --build_logs ";
 
     String Build2Test = getRunnerParameters().get(EchoRunnerConstants.BUILD_TO_TEST);
-    if (Build2Test == null) {
+    if (Build2Test.equals("None")) {
       Build2Test = "";
     } else {
       Build2Test = " -btv " + Build2Test.toLowerCase();
@@ -209,7 +209,8 @@ public class EchoService extends BuildServiceAdapter {
                   + FusionSetId
                   + TeamId
                   + BuildLogs
-                  + SignDetails;
+                  + SignDetails
+                  + Build2Test;
 
     scriptContent += OutputFile + CertOutput + " | tee appdome.log";
 
