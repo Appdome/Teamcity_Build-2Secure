@@ -77,7 +77,8 @@ public class EchoService extends BuildServiceAdapter {
 
     String SecondaryOutput = getRunnerParameters().get(EchoRunnerConstants.SECONDARY_OUTPUT);
     if ((SecondaryOutput != null) && isAAB && !SignType.equals("Auto-Dev-Sign")) {
-      String BuildSO = localDir + "/Appdome_Universal.apk";
+      String outputDir = getWorkingDirectory().getAbsolutePath();
+      String BuildSO = outputDir + "/Appdome_Universal.apk";
       SecondaryOutput = " --second_output " + BuildSO;
       setOutputEnv("APPDOME_BUILD_SO", BuildSO);
     } else {
@@ -131,13 +132,29 @@ public class EchoService extends BuildServiceAdapter {
     return SingDetails;
   }
 
+  public void RemoveOldArtifacts(String Directory) {
+    File folder = new File(Directory);
+    ArrayList <File> toDelete = new ArrayList<File>();
+    File[] files = folder.listFiles();
+    for (File file: files) {
+      if (file.getName().matches("Appdome_.*") || file.getName().matches(".*.pdf")) {
+        toDelete.add(file);
+      }
+    }
+    for (File file: toDelete) {
+      file.delete();
+    }
+  }
+
   @NotNull
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
     setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.0.0");
-    String localDir = getWorkingDirectory().getAbsolutePath() + "/appdome-api-bash";
+    String outputDir = getWorkingDirectory().getAbsolutePath();
+    String localDir = outputDir + "/appdome-api-bash";
     try {
       FileUtils.deleteDirectory(new File(localDir));
+      RemoveOldArtifacts(outputDir);
     } catch (IOException e) {}
 
     // clone to Appdome Git repository
@@ -192,10 +209,9 @@ public class EchoService extends BuildServiceAdapter {
     } else {
       SignDetails = CollectSigningDetailsIOS(localDir);
     }
-
-    String FusedAppFile = localDir + "/Appdome_" + VanillaFileName;
+    String FusedAppFile = outputDir + "/Appdome_" + VanillaFileName;
     setOutputEnv("APPDOME_BUILD", FusedAppFile);
-    String CertSecureFile = localDir + "/certificate.pdf";
+    String CertSecureFile = outputDir + "/certificate.pdf";
     String App = "--app " + AppFileLocal;
     String OutputFile = " --output " + FusedAppFile;
     String CertOutput = " --certificate_output " + CertSecureFile;
@@ -212,7 +228,7 @@ public class EchoService extends BuildServiceAdapter {
                   + SignDetails
                   + Build2Test;
 
-    scriptContent += OutputFile + CertOutput + " | tee appdome.log";
+    scriptContent += OutputFile + CertOutput + " | tee ../appdome.log && cd .. && rm -rf appdome-api-bash";
 
     String script = getCustomScript(scriptContent);
     setExecutableAttribute(script);
