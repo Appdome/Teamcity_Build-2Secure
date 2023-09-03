@@ -23,6 +23,7 @@
 <c:set var="ent_file_location" value="<%=EchoRunnerConstants.ENT_FILE_LOCATION%>"/>
 <c:set var="build_to_test" value="<%=EchoRunnerConstants.BUILD_TO_TEST%>"/>
 <c:set var="secondary_output" value="<%=EchoRunnerConstants.SECONDARY_OUTPUT%>"/>
+<c:set var="output_file_name" value="<%=EchoRunnerConstants.OUTPUT_FILE_NAME%>"/>
 
 <l:settingsGroup title="Appdome Build2secure Settings">
 <tr id="plaform" style="display: block">
@@ -40,6 +41,13 @@
                <props:textProperty name="${app_location}" size="56" maxlength="2000"/>
                <span class="error" id="error_${app_location}"></span>
        </td>
+</tr>
+<tr id="output_file_name" style="display: block">
+ <th><label for="${output_file_name}">Output File Name (with no file ext.):</label></th>
+ <td>
+      <props:textProperty name="${output_file_name}" size="56" maxlength="100"/>
+      <span class="error" id="error_${output_file_name}"></span>
+ </td>
 </tr>
 <tr id="fusion_set" style="display: block">
  <th><label for="${fusion_set}">Fusion Set:</label></th>

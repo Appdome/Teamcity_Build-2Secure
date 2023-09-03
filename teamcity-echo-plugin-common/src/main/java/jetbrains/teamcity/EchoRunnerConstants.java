@@ -18,6 +18,7 @@ public interface EchoRunnerConstants {
   String API_KEY = System.getenv("api_key");
   String FUSION_SET = "fusion_set";
   String SECONDARY_OUTPUT = "secondary_output";
+  String OUTPUT_FILE_NAME = "output_file_name";
   String TEAM_ID = "team_id";
   String PROVISIONING_FILE_LOCATION = "provisioning_file_location";
   String CERT_FILE_LOCATION = "cert_file_location";
