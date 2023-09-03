@@ -77,7 +77,15 @@ public class EchoService extends BuildServiceAdapter {
 
     String SecondaryOutput = getRunnerParameters().get(EchoRunnerConstants.SECONDARY_OUTPUT);
     if ((SecondaryOutput != null) && isAAB && !SignType.equals("Auto-Dev-Sign")) {
-      String BuildSO = localDir + "/Appdome_Universal.apk";
+      String OutputFileName = getRunnerParameters().get(EchoRunnerConstants.OUTPUT_FILE_NAME);
+      String outputDir = getWorkingDirectory().getAbsolutePath();
+      String artifactsDir = outputDir + "/artifacts/";
+      String BuildSO;
+      if (OutputFileName == null) {
+        BuildSO = artifactsDir + "Appdome_Universal.apk";
+      } else {
+        BuildSO = artifactsDir + OutputFileName + "_Universal.apk";
+      }
       SecondaryOutput = " --second_output " + BuildSO;
       setOutputEnv("APPDOME_BUILD_SO", BuildSO);
     } else {
@@ -131,13 +139,31 @@ public class EchoService extends BuildServiceAdapter {
     return SingDetails;
   }
 
+  public void RemoveOldArtifacts(String Directory) {
+    File folder = new File(Directory);
+    ArrayList <File> toDelete = new ArrayList<File>();
+    File[] files = folder.listFiles();
+    for (File file: files) {
+      if (file.getName().matches(".*.aab") || file.getName().matches(".*.apk") || file.getName().matches(".*.ipa") || file.getName().matches(".*.pdf")) {
+        toDelete.add(file);
+      }
+    }
+    for (File file: toDelete) {
+      file.delete();
+    }
+  }
+
   @NotNull
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.0.0");
-    String localDir = getWorkingDirectory().getAbsolutePath() + "/appdome-api-bash";
+    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.0");
+    String outputDir = getWorkingDirectory().getAbsolutePath();
+    String artifactsDir = outputDir + "/artifacts/";
+    String localDir = outputDir + "/appdome-api-bash";
     try {
       FileUtils.deleteDirectory(new File(localDir));
+      RemoveOldArtifacts(outputDir);
+      FileUtils.deleteDirectory(new File(artifactsDir));
     } catch (IOException e) {}
 
     // clone to Appdome Git repository
@@ -152,12 +178,16 @@ public class EchoService extends BuildServiceAdapter {
       if (debugOnly.equals("1")) {
         debug = true;
       }
+    } catch (Exception e) {}
+
+    try {
+      FileUtils.forceMkdir(new File(artifactsDir));
     } catch (Exception e) {
+      throw new RuntimeException(e);
     }
 
     String ApiKey = " --api_key " + getEnvironmentVariables().get("api_key");
     String FusionSetId = " --fusion_set_id " + getRunnerParameters().get(EchoRunnerConstants.FUSION_SET);
-
     String TeamId = getRunnerParameters().get(EchoRunnerConstants.TEAM_ID);
     TeamId = (TeamId == null) ? "": " --team_id " + TeamId;
 
@@ -165,7 +195,7 @@ public class EchoService extends BuildServiceAdapter {
     BuildLogs = (BuildLogs == null) ? "": " --build_logs ";
 
     String Build2Test = getRunnerParameters().get(EchoRunnerConstants.BUILD_TO_TEST);
-    if (Build2Test == null) {
+    if (Build2Test.equals("None")) {
       Build2Test = "";
     } else {
       Build2Test = " -btv " + Build2Test.toLowerCase();
@@ -193,9 +223,10 @@ public class EchoService extends BuildServiceAdapter {
       SignDetails = CollectSigningDetailsIOS(localDir);
     }
 
-    String FusedAppFile = localDir + "/Appdome_" + VanillaFileName;
+    String OutputFileName = getRunnerParameters().get(EchoRunnerConstants.OUTPUT_FILE_NAME);
+    String FusedAppFile = (OutputFileName == null) ? artifactsDir + "Appdome_" + VanillaFileName: artifactsDir + OutputFileName + "." + AppType;
     setOutputEnv("APPDOME_BUILD", FusedAppFile);
-    String CertSecureFile = localDir + "/certificate.pdf";
+    String CertSecureFile = artifactsDir + "certificate.pdf";
     String App = "--app " + AppFileLocal;
     String OutputFile = " --output " + FusedAppFile;
     String CertOutput = " --certificate_output " + CertSecureFile;
@@ -209,9 +240,10 @@ public class EchoService extends BuildServiceAdapter {
                   + FusionSetId
                   + TeamId
                   + BuildLogs
-                  + SignDetails;
+                  + SignDetails
+                  + Build2Test;
 
-    scriptContent += OutputFile + CertOutput + " | tee appdome.log";
+    scriptContent += OutputFile + CertOutput + " | tee ../appdome.log && cd .. && rm -rf appdome-api-bash";
 
     String script = getCustomScript(scriptContent);
     setExecutableAttribute(script);

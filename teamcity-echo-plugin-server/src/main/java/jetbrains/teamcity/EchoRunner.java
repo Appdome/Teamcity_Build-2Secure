@@ -91,6 +91,8 @@ public class EchoRunner extends RunType {
     String Platform = parameters.get(PLATFORM);
     String AppLocation = parameters.get(APP_LOCATION);
     AppLocation = (AppLocation == null) ? "Not provided": "Provided";
+    String OutputFileName = parameters.get(OUTPUT_FILE_NAME);
+    OutputFileName = (OutputFileName == null) ? "Use default name": OutputFileName;
     String FP;
     String TeamId = parameters.get(TEAM_ID);
     TeamId = (TeamId == null) ? "Not provided": TeamId;
@@ -125,13 +127,23 @@ public class EchoRunner extends RunType {
     String SignType = parameters.get(SIGN_TYPE);
     String Build2Test = parameters.get(BUILD_TO_TEST);
     String SO = parameters.get(SECONDARY_OUTPUT);
-    SO = (SO == null) ? "false":"Appdome_Universal.apk";
+    if (SO == null) {
+      SO = "false";
+    } else {
+      if (OutputFileName == "Use default name") {
+        SO = "Appdome_Universal.apk";
+      } else {
+        SO = OutputFileName + "_Universal.apk";
+      }
+    }
+
     if (SignType.equals("Auto-Dev-Sign")) {
       SO = "false";
     }
 
     String description = "App Location: " + AppLocation
               + "\nPlatform: " + Platform
+              + "\nOutput File Name: " + OutputFileName
               + "\nFusion Set: " + FS
               + "\nTeam ID: " + TeamId
               + "\nSign Type: " + SignType;
