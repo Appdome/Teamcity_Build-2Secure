@@ -156,7 +156,7 @@ public class EchoService extends BuildServiceAdapter {
   @NotNull
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.0");
+    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.1");
     String outputDir = getWorkingDirectory().getAbsolutePath();
     String artifactsDir = outputDir + "/artifacts/";
     String localDir = outputDir + "/appdome-api-bash";
@@ -213,6 +213,7 @@ public class EchoService extends BuildServiceAdapter {
 
     String VanillaFileName = new File(AppFileLocal).getName();
     String AppType = VanillaFileName.substring(VanillaFileName.lastIndexOf(".")+1);
+    String AppName = VanillaFileName.substring(0, VanillaFileName.lastIndexOf("."));
     Boolean isAAB = (AppType.equals("aab")) ? true:false;
 
     final String Platform = getRunnerParameters().get(EchoRunnerConstants.PLATFORM);
@@ -223,8 +224,14 @@ public class EchoService extends BuildServiceAdapter {
       SignDetails = CollectSigningDetailsIOS(localDir);
     }
 
+    String SignType = getRunnerParameters().get(EchoRunnerConstants.SIGN_TYPE);
+    String extension = AppType;
+    if (SignType.equals("Auto-Dev-Sign")) {
+      extension = "sh";
+    }
     String OutputFileName = getRunnerParameters().get(EchoRunnerConstants.OUTPUT_FILE_NAME);
-    String FusedAppFile = (OutputFileName == null) ? artifactsDir + "Appdome_" + VanillaFileName: artifactsDir + OutputFileName + "." + AppType;
+    String FusedAppFile = (OutputFileName == null) ? artifactsDir + "Appdome_" + AppName : artifactsDir + OutputFileName;
+    FusedAppFile = FusedAppFile + "." + extension;
     setOutputEnv("APPDOME_BUILD", FusedAppFile);
     String CertSecureFile = artifactsDir + "certificate.pdf";
     String App = "--app " + AppFileLocal;
