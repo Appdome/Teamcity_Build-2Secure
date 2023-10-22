@@ -26,7 +26,7 @@
 <c:set var="output_file_name" value="<%=EchoRunnerConstants.OUTPUT_FILE_NAME%>"/>
 
 <l:settingsGroup title="Appdome Build2secure Settings">
-<tr id="plaform" style="display: block">
+<tr id="plaform">
 <th><label for="plaform">Platform:</label></th>
 <td>
   <props:selectProperty name="${platform}" onchange="EchoRunner.onChange()" enableFilter="true" className="smallField">
@@ -35,35 +35,36 @@
   </props:selectProperty>
 </td>
 </tr>
-<tr id="app_location" style="display: block">
+
+<tr id="app_location">
        <th><label for="${app_location}">App File Location: </label></th>
        <td>
                <props:textProperty name="${app_location}" size="56" maxlength="2000"/>
                <span class="error" id="error_${app_location}"></span>
        </td>
 </tr>
-<tr id="output_file_name" style="display: block">
+<tr id="output_file_name">
  <th><label for="${output_file_name}">Output File Name (with no file ext.):</label></th>
  <td>
       <props:textProperty name="${output_file_name}" size="56" maxlength="100"/>
       <span class="error" id="error_${output_file_name}"></span>
  </td>
 </tr>
-<tr id="fusion_set" style="display: block">
+<tr id="fusion_set">
  <th><label for="${fusion_set}">Fusion Set:</label></th>
  <td>
     <props:textProperty name="${fusion_set}" size="56" maxlength="100"/>
     <span class="error" id="error_${fusion_set}"></span>
  </td>
 </tr>
-<tr id="team_id" style="display: block">
+<tr id="team_id">
  <th><label for="${team_id}">Team ID:</label></th>
  <td>
     <props:textProperty name="${team_id}" size="56" maxlength="100"/>
     <span class="error" id="error_${team_id}"></span>
  </td>
 </tr>
-<tr id="sign_typexx" style="display: block">
+<tr id="sign_typexx">
 <th><label for="sign_type">Sign Type:</label></th>
 <td>
   <props:selectProperty name="${sign_type}" onchange="EchoRunner.onChange()" enableFilter="true" className="mediumField">
@@ -73,7 +74,7 @@
   </props:selectProperty>
 </td>
 </tr>
-<tr id="keystore_file_location" style="display: block">
+<tr id="keystore_file_location">
 <th><label for="${keystore_file_location}">Keystore File:</label></th>
 <td>
     <div class="pos3">
@@ -82,7 +83,7 @@
     </div>
 </td>
 </tr>
-<tr id="keystore_pass" style="display: block">
+<tr id="keystore_pass">
 <th><label for="${keystore_pass}">Keystore Password:</label></th>
 <td>
   <div class="pos3">
@@ -91,7 +92,7 @@
   </div>
 </td>
 </tr>
-<tr id="keystore_alias" style="display: block">
+<tr id="keystore_alias">
 <th><label for="${keystore_alias}">Keystore Alias:</label></th>
 <td>
     <div class="pos3">
@@ -100,7 +101,7 @@
     </div>
 </td>
 </tr>
-<tr id="key_pass" style="display: block">
+<tr id="key_pass">
 <th><label for="${key_pass}">Key Password:</label></th>
 <td>
   <div class="pos3">
@@ -109,7 +110,7 @@
   </div>
 </td>
 </tr>
-<tr id="google_sign" style="display: block">
+<tr id="google_sign">
   <th><label for="google_sign">Google Sign:</label></th>
   <td>
       <div class="pos4">
@@ -117,7 +118,7 @@
       </div>
   </td>
 </tr>
-<tr id="google_play_fp" style="display: block">
+<tr id="google_play_fp">
   <th><label for="${google_play_fingerprint}">Google Play Fingerprint:</label></th>
   <td>
       <div class="pos5">
@@ -126,14 +127,14 @@
       </div>
   </td>
 </tr>
-<tr id="fingerprint" style="display: block">
+<tr id="fingerprint">
 <th><label for="${fingerprint}">Fingerprint:</label></th>
 <td>
     <props:textProperty name="${fingerprint}" size="56" maxlength="100"/>
     <span class="error" id="error_${fingerprint}"></span>
 </td>
 </tr>
-<tr id="secondary_output" style="display: block">
+<tr id="secondary_output">
   <th><label for="secondary_output">Secondary Output:</label></th>
   <td>
       <div class="pos4">
@@ -141,7 +142,7 @@
       </div>
   </td>
 </tr>
-<tr id="provisioning_profile_file_location" style="display: block">
+<tr id="provisioning_profile_file_location">
 <th><label for="${provisioning_profile_file_location}">Provisioning Profile Files:</label></th>
 <td>
   <div class="pos3">
@@ -150,7 +151,7 @@
   </div>
 </td>
 </tr>
-<tr id="cert_file_location" style="display: block">
+<tr id="cert_file_location">
 <th><label for="${cert_file_location}">Signing Certificate File:</label></th>
 <td>
     <div class="pos3">
@@ -159,7 +160,7 @@
     </div>
 </td>
 </tr>
-<tr id="cert_pass" style="display: block">
+<tr id="cert_pass">
   <th><label for="${cert_pass}">Certificate Password:</label></th>
   <td>
     <div class="pos3">
@@ -168,7 +169,7 @@
     </div>
   </td>
 </tr>
-<tr id="ent_file_location" style="display: block">
+<tr id="ent_file_location">
   <th><label for="${ent_file_location}">Entitlement Files:</label></th>
   <td>
       <div class="pos3">
@@ -177,7 +178,7 @@
       </div>
   </td>
 </tr>
-<tr id="build_2_test" style="display: block">
+<tr id="build_2_test">
 <th><label for="build_2_test">Build to Test:</label></th>
 <td>
   <props:selectProperty name="${build_to_test}" enableFilter="true" className="mediumField">
@@ -189,7 +190,7 @@
   </props:selectProperty>
 </td>
 </tr>
-<tr id="build_logs" style="display: block">
+<tr id="build_logs">
   <th><label for="build_logs">Build with Logs:</label></th>
   <td>
       <div class="pos4">
@@ -256,7 +257,7 @@
             BS.Util.hide('cert_pass');
         }
      }
-     VisibilityHandlers.updateVisibility('mainContent');
+
    }
   };
   EchoRunner.onChange();

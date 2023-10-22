@@ -156,7 +156,7 @@ public class EchoService extends BuildServiceAdapter {
   @NotNull
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.1");
+    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.2");
     String outputDir = getWorkingDirectory().getAbsolutePath();
     String artifactsDir = outputDir + "/artifacts/";
     String localDir = outputDir + "/appdome-api-bash";
