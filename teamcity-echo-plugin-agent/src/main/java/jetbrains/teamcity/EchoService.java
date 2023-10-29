@@ -162,7 +162,7 @@ public class EchoService extends BuildServiceAdapter {
     String localDir = outputDir + "/appdome-api-bash";
     try {
       FileUtils.deleteDirectory(new File(localDir));
-      RemoveOldArtifacts(outputDir);
+//      RemoveOldArtifacts(outputDir);
       FileUtils.deleteDirectory(new File(artifactsDir));
     } catch (IOException e) {}
 
