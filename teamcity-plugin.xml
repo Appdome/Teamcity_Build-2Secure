@@ -3,11 +3,11 @@
   <info>
     <name>Appdome Build-2Secure</name>
     <display-name>Appdome Build-2Secure</display-name>
-    <version>1.1.1</version>
+    <version>1.1.3</version>
     <description>
       With Appdome Build-2Secure plugin, you can easily secure and customize your mobile apps on Jetbrains TeamCity as part of your build and deploy process.
       See full description and tutorial at:
-      https://www.appdome.com/how-to/devsecops-automation-mobile-cicd/mobile-app-security-anti-fraud-cicd/secure-android-ios-apps-in-teamcity-ci-cd-pipelines/
+      https://www.appdome.com/how-to/devsecops-automation-mobile-cicd/cyber-release-management/use-appdome-build-2secure-in-teamcity/
     </description>
     <download-url>Plugin download URL</download-url>
     <email>eli@appdome.com</email>
