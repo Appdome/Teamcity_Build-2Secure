@@ -26,6 +26,7 @@ public interface EchoRunnerConstants {
   String ENT_FILE_LOCATION = "ent_file_location";
   String BUILD_TO_TEST = "build2test";
   String APPDOME_BUILD = System.getenv("APPDOME_BUILD");
+  String APPDOME_CERT = System.getenv("APPDOME_CERT");
   String APPDOME_BUILD_SO = System.getenv("APPDOME_BUILD_SO");
   String AppdomeRepoURL = "https://github.com/Appdome/appdome-api-bash.git";
 }

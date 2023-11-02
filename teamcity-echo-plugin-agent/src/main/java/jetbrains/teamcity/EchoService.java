@@ -156,7 +156,7 @@ public class EchoService extends BuildServiceAdapter {
   @NotNull
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.2");
+    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.4");
     String outputDir = getWorkingDirectory().getAbsolutePath();
     String artifactsDir = outputDir + "/artifacts/";
     String localDir = outputDir + "/appdome-api-bash";
@@ -234,6 +234,7 @@ public class EchoService extends BuildServiceAdapter {
     FusedAppFile = FusedAppFile + "." + extension;
     setOutputEnv("APPDOME_BUILD", FusedAppFile);
     String CertSecureFile = artifactsDir + "certificate.pdf";
+    setOutputEnv("APPDOME_CERT", CertSecureFile);
     String App = "--app " + AppFileLocal;
     String OutputFile = " --output " + FusedAppFile;
     String CertOutput = " --certificate_output " + CertSecureFile;

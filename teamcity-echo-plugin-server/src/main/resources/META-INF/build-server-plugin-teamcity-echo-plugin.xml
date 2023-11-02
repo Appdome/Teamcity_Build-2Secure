@@ -6,7 +6,7 @@
 
     <bean id="echoRunner" class="jetbrains.teamcity.EchoRunner"/>
 
-    <bean id="echoReportTab" class="jetbrains.teamcity.web.EchoReport"/>
+<!--    <bean id="echoReportTab" class="jetbrains.teamcity.web.EchoReport"/>-->
 
 </beans>
 
