@@ -68,9 +68,9 @@
 <th><label for="sign_type">Sign Type:</label></th>
 <td>
   <props:selectProperty name="${sign_type}" onchange="EchoRunner.onChange()" enableFilter="true" className="mediumField">
-    <option value="On-Appdome-Sign" currValue="${sign_typeSelected}">On-Appdome Sign</option>
-    <option value="Private-Sign" currValue="${sign_typeSelected}">Private Sign</option>
-    <option value="Auto-Dev-Sign" currValue="${sign_typeSelected}">Auto-Dev Sign</option>
+    <props:option value="On-Appdome-Sign" currValue="${sign_typeSelected}">On-Appdome Sign</props:option>
+    <props:option value="Private-Sign" currValue="${sign_typeSelected}">Private Sign</props:option>
+    <props:option value="Auto-Dev-Sign" currValue="${sign_typeSelected}">Auto-Dev Sign</props:option>
   </props:selectProperty>
 </td>
 </tr>
