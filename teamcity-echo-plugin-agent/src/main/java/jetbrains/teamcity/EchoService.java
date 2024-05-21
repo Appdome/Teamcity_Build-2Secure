@@ -156,7 +156,7 @@ public class EchoService extends BuildServiceAdapter {
   @NotNull
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.4");
+    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.5");
     String outputDir = getWorkingDirectory().getAbsolutePath();
     String artifactsDir = outputDir + "/artifacts/";
     String localDir = outputDir + "/appdome-api-bash";
@@ -218,10 +218,13 @@ public class EchoService extends BuildServiceAdapter {
 
     final String Platform = getRunnerParameters().get(EchoRunnerConstants.PLATFORM);
     String SignDetails;
+    String AppID = getRunnerParameters().get(EchoRunnerConstants.APP_ID);
     if (Platform.equals("Android")) {
       SignDetails = CollectSigningDetailsAndroid(localDir, isAAB);
+      AppID = (AppID == null) ? "": " --app_id " + AppID;
     } else {
       SignDetails = CollectSigningDetailsIOS(localDir);
+      AppID = "";
     }
 
     String SignType = getRunnerParameters().get(EchoRunnerConstants.SIGN_TYPE);
@@ -229,8 +232,12 @@ public class EchoService extends BuildServiceAdapter {
     if (SignType.equals("Auto-Dev-Sign")) {
       extension = "sh";
     }
+
+    String DeobfuscationMappingFiles = artifactsDir + "deobfuscation_mapping_files.zip";
     String OutputFileName = getRunnerParameters().get(EchoRunnerConstants.OUTPUT_FILE_NAME);
-    String FusedAppFile = (OutputFileName == null) ? artifactsDir + "Appdome_" + AppName : artifactsDir + OutputFileName;
+    String FusedAppFile = (OutputFileName == null) ? artifactsDir + "Appdome_" + AppName : artifactsDir +
+            OutputFileName;
+    String DSO = " -dso " + DeobfuscationMappingFiles;
     FusedAppFile = FusedAppFile + "." + extension;
     setOutputEnv("APPDOME_BUILD", FusedAppFile);
     String CertSecureFile = artifactsDir + "certificate.pdf";
@@ -249,6 +256,8 @@ public class EchoService extends BuildServiceAdapter {
                   + TeamId
                   + BuildLogs
                   + SignDetails
+                  + DSO
+                  + AppID
                   + Build2Test;
 
     scriptContent += OutputFile + CertOutput + " | tee ../appdome.log && cd .. && rm -rf appdome-api-bash";
@@ -265,8 +274,8 @@ public class EchoService extends BuildServiceAdapter {
       myFilesToDelete.add(scriptFile);
       return scriptFile.getAbsolutePath();
     } catch (IOException e) {
-      RunBuildException exception = new RunBuildException("Failed to create temporary custom script file in directory '" + getAgentTempDirectory() + "': " + e
-          .toString(), e);
+      RunBuildException exception = new RunBuildException("Failed to create temporary custom script file in directory '"
+              + getAgentTempDirectory() + "': " + e.toString(), e);
       exception.setLogStacktrace(false);
       throw exception;
     }

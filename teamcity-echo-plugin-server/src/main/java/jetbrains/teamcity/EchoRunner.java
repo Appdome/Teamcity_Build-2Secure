@@ -96,6 +96,8 @@ public class EchoRunner extends RunType {
     String FP;
     String TeamId = parameters.get(TEAM_ID);
     TeamId = (TeamId == null) ? "Not provided": TeamId;
+    String AppId = parameters.get(APP_ID);
+    AppId = (AppId == null) ? "Not provided": AppId;
     String GoogleSign = parameters.get(GOOGLE_SIGN);
     if (GoogleSign == null) {
       GoogleSign = "false";
@@ -149,7 +151,8 @@ public class EchoRunner extends RunType {
               + "\nSign Type: " + SignType;
 
     if (Platform.equals("Android")) {
-      description += "\nGoogle Sign: " + GoogleSign
+      description += "\nFirebase App ID: " + AppId
+              + "\nGoogle Sign: " + GoogleSign
               + "\nFingerprint: " + FP
               + "\nSecondary Output: " + SO
               + "\nKeystore File: " + KSF

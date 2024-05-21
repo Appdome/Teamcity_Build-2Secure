@@ -11,6 +11,7 @@ public interface EchoRunnerConstants {
   String SIGN_TYPE = "sign_type";
   String BUILD_LOGS = "build_logs";
   String APP_LOCATION = "app_location";
+  String APP_ID = "app_id";
   String KEYSTORE_FILE_LOCATION = "keystore_file_location";
   String KEYSTORE_PASS = "keystore_pass";
   String KEYSTORE_ALIAS = "keystore_alias";
@@ -28,5 +29,6 @@ public interface EchoRunnerConstants {
   String APPDOME_BUILD = System.getenv("APPDOME_BUILD");
   String APPDOME_CERT = System.getenv("APPDOME_CERT");
   String APPDOME_BUILD_SO = System.getenv("APPDOME_BUILD_SO");
+  String GOOGLE_APPLICATION_CREDENTIALS = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
   String AppdomeRepoURL = "https://github.com/Appdome/appdome-api-bash.git";
 }
