@@ -24,6 +24,7 @@
 <c:set var="build_to_test" value="<%=EchoRunnerConstants.BUILD_TO_TEST%>"/>
 <c:set var="secondary_output" value="<%=EchoRunnerConstants.SECONDARY_OUTPUT%>"/>
 <c:set var="output_file_name" value="<%=EchoRunnerConstants.OUTPUT_FILE_NAME%>"/>
+<c:set var="app_id" value="<%=EchoRunnerConstants.APP_ID%>"/>
 
 <l:settingsGroup title="Appdome Build2secure Settings">
 <tr id="plaform">
@@ -49,6 +50,13 @@
       <props:textProperty name="${output_file_name}" size="56" maxlength="100"/>
       <span class="error" id="error_${output_file_name}"></span>
  </td>
+</tr>
+<tr id="app_id">
+       <th><label for="${app_id}">Firebase App ID: </label></th>
+       <td>
+               <props:textProperty name="${app_id}" size="56" maxlength="2000"/>
+               <span class="error" id="error_${app_id}"></span>
+       </td>
 </tr>
 <tr id="fusion_set">
  <th><label for="${fusion_set}">Fusion Set:</label></th>
@@ -210,6 +218,7 @@
      var selectedPlatValue = selplat[selplat.selectedIndex].value;
 
      if (selectedPlatValue == 'Android') {
+         BS.Util.show('app_id');
          BS.Util.show('fingerprint');
          BS.Util.show('google_play_fp');
          BS.Util.show('google_sign');
@@ -239,6 +248,7 @@
          }
 
      } else {
+        BS.Util.hide('app_id');
         BS.Util.hide('fingerprint');
         BS.Util.hide('google_play_fp');
         BS.Util.hide('google_sign');
