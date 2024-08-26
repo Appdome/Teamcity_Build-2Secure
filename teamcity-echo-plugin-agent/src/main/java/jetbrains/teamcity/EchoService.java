@@ -156,7 +156,8 @@ public class EchoService extends BuildServiceAdapter {
   @NotNull
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-    setOutputEnv("APPDOME_CLIENT_HEADER", "TeamCity/1.1.5");
+    String pluginVersion = "TeamCity/1.1.6";
+    setOutputEnv("APPDOME_CLIENT_HEADER", pluginVersion);
     String outputDir = getWorkingDirectory().getAbsolutePath();
     String artifactsDir = outputDir + "/artifacts/";
     String localDir = outputDir + "/appdome-api-bash";

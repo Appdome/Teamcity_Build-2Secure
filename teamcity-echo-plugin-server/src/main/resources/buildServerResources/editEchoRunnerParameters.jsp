@@ -191,10 +191,16 @@
 <td>
   <props:selectProperty name="${build_to_test}" enableFilter="true" className="mediumField">
     <option value="None" currValue="${build_to_testSelected}">None</option>
+    <option value="AWS_device_farm" currValue="${build_to_testSelected}">AWS device farm</option>
     <option value="Bitbar" currValue="${build_to_testSelected}">Bitbar</option>
     <option value="Browserstack" currValue="${build_to_testSelected}">Browserstack</option>
-    <option value="Saucelabs" currValue="${build_to_testSelected}">Saucelabs</option>
+    <option value="Firebase" currValue="${build_to_testSelected}">Firebase</option>
+    <option value="Katalon" currValue="${build_to_testSelected}">Katalon</option>
+    <option value="Kobiton" currValue="${build_to_testSelected}">Kobiton</option>
     <option value="Lambdatest" currValue="${build_to_testSelected}">Lambdatest</option>
+    <option value="Perfecto" currValue="${build_to_testSelected}">Perfecto</option>
+    <option value="Saucelabs" currValue="${build_to_testSelected}">Saucelabs</option>
+    <option value="Tosca" currValue="${build_to_testSelected}">Tosca</option>
   </props:selectProperty>
 </td>
 </tr>
